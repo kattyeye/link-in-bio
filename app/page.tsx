@@ -10,7 +10,8 @@ interface LinkItem {
   label: string;
   description: string;
   href: string;
-  tag: string;
+  tag?: string;
+  domain?: string;
   affiliate?: boolean;
   emoji: string;
 }
@@ -21,21 +22,21 @@ const projects: LinkItem[] = [
     label: "SmartPO",
     description: "Procurement for healthcare supply teams",
     href: "https://smartpo.com",
-    tag: "smartpo.com",
+    domain: "smartpo.com",
   },
   {
     emoji: "◐",
     label: "Hey Poppi",
     description: "AI voice agents that answer the phone",
     href: "https://heypoppi.ai",
-    tag: "heypoppi.ai",
+    domain: "heypoppi.ai",
   },
   {
     emoji: "◇",
     label: "Irie",
     description: "Plan a trip in minutes, not tabs",
     href: "https://irietravel.app",
-    tag: "irietravel.app",
+    domain: "irietravel.app",
   },
 ];
 
@@ -101,16 +102,21 @@ function LinkCard({ item }: { item: LinkItem }) {
       <span className="text-xl w-8 text-center shrink-0 leading-none">{item.emoji}</span>
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-stone-900 text-sm leading-snug">{item.label}</p>
-        <p className="text-stone-400 text-xs mt-0.5 leading-snug truncate">{item.description}</p>
-      </div>
-      <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
-        <span className="text-[10px] font-medium tracking-widest uppercase text-stone-400 whitespace-nowrap">
-          {item.tag}
-        </span>
-        {item.affiliate && (
-          <span className="text-[9px] text-stone-300">#ad</span>
+        <p className="text-stone-400 text-xs mt-0.5 leading-snug">{item.description}</p>
+        {item.domain && (
+          <p className="text-[11px] text-stone-400/80 mt-1 leading-none">{item.domain}</p>
         )}
       </div>
+      {item.tag && (
+        <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
+          <span className="text-[10px] font-medium tracking-widest uppercase text-stone-400 whitespace-nowrap">
+            {item.tag}
+          </span>
+          {item.affiliate && (
+            <span className="text-[9px] text-stone-300">#ad</span>
+          )}
+        </div>
+      )}
     </a>
   );
 }
