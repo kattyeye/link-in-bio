@@ -1,38 +1,26 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "kattyeye | links",
-  description:
-    "Kat's links — SmartPO, Hey Poppi, Irie, plus garden and kitchen picks",
-};
-
 interface LinkItem {
   label: string;
   description: string;
   href: string;
-  tag?: string;
   domain?: string;
+  handle?: string;
   affiliate?: boolean;
-  emoji: string;
 }
 
-const projects: LinkItem[] = [
+const work: LinkItem[] = [
   {
-    emoji: "▤",
     label: "SmartPO",
-    description: "Procurement for healthcare supply teams",
+    description: "Procurement platform for healthcare supply teams",
     href: "https://smartpo.com",
     domain: "smartpo.com",
   },
   {
-    emoji: "◐",
     label: "Hey Poppi",
     description: "AI voice agents that answer the phone",
     href: "https://heypoppi.ai",
     domain: "heypoppi.ai",
   },
   {
-    emoji: "◇",
     label: "Irie",
     description: "Plan a trip in minutes, not tabs",
     href: "https://irietravel.app",
@@ -40,157 +28,149 @@ const projects: LinkItem[] = [
   },
 ];
 
-const socials: LinkItem[] = [
+const elsewhere: LinkItem[] = [
   {
-    emoji: "↗",
     label: "Portfolio",
-    description: "Work, projects & experience",
+    description: "Work, projects and experience",
     href: "https://kattyeye.com",
-    tag: "kattyeye.com",
+    domain: "kattyeye.com",
   },
   {
-    emoji: "◎",
     label: "Instagram",
-    description: "Garden, food & life in Greenville",
+    description: "Garden, food and life in Greenville",
     href: "https://instagram.com/kattyeye",
-    tag: "@kattyeye",
+    handle: "@kattyeye",
   },
   {
-    emoji: "✦",
     label: "Pinterest",
-    description: "Tools, recipes & home inspo",
+    description: "Tools, recipes and home inspo",
     href: "https://pinterest.com/kattyeye",
-    tag: "kattyeye",
+    handle: "@kattyeye",
   },
 ];
 
+/* Honest picks — hidden until the Amazon storefront lists exist
 const picks: LinkItem[] = [
   {
-    emoji: "🌱",
-    label: "Garden & Raised Beds",
-    description: "My backyard build — beds, drip irrigation, tools",
+    label: "Garden and raised beds",
+    description: "Beds, drip irrigation, the tools I actually use",
     href: "https://www.amazon.com/shop/kattyeye",
-    tag: "amazon picks",
     affiliate: true,
   },
   {
-    emoji: "🫙",
-    label: "Kitchen & Fermentation",
-    description: "Crocks, knives, baking gear I use daily",
+    label: "Kitchen and fermentation",
+    description: "Crocks, knives, baking gear I reach for daily",
     href: "https://www.amazon.com/shop/kattyeye",
-    tag: "amazon picks",
     affiliate: true,
   },
   {
-    emoji: "⌨",
-    label: "My Dev Setup",
-    description: "Keyboard, monitor, accessories I code with",
+    label: "Dev setup",
+    description: "Keyboard, monitor, the rest of the desk",
     href: "https://www.amazon.com/shop/kattyeye",
-    tag: "amazon picks",
     affiliate: true,
   },
 ];
+*/
 
-function LinkCard({ item }: { item: LinkItem }) {
+function LinkRow({ item }: { item: LinkItem }) {
   return (
     <a
       href={item.href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-4 bg-white border border-stone-200 rounded-2xl px-5 py-4 hover:border-stone-400 hover:shadow-sm transition-all duration-150"
+      className="group flex items-start gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-5 py-4 backdrop-blur-sm transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.05] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400/60"
     >
-      <span className="text-xl w-8 text-center shrink-0 leading-none">{item.emoji}</span>
-      <div className="flex-1 min-w-0">
-        <p className="font-semibold text-stone-900 text-sm leading-snug">{item.label}</p>
-        <p className="text-stone-400 text-xs mt-0.5 leading-snug">{item.description}</p>
-        {item.domain && (
-          <p className="text-[11px] text-stone-400/80 mt-1 leading-none">{item.domain}</p>
+      <div className="min-w-0 flex-1">
+        <p className="text-[15px] font-semibold leading-tight tracking-tight text-white">
+          {item.label}
+        </p>
+        <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-400">
+          {item.description}
+        </p>
+        {(item.domain || item.handle) && (
+          <p className="mt-2 text-[12px] leading-none text-neutral-500 transition-colors duration-200 group-hover:text-sky-300/80">
+            {item.domain ?? item.handle}
+          </p>
+        )}
+        {item.affiliate && (
+          <p className="mt-2 text-[12px] leading-none text-neutral-500">#ad</p>
         )}
       </div>
-      {item.tag && (
-        <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
-          <span className="text-[10px] font-medium tracking-widest uppercase text-stone-400 whitespace-nowrap">
-            {item.tag}
-          </span>
-          {item.affiliate && (
-            <span className="text-[9px] text-stone-300">#ad</span>
-          )}
-        </div>
-      )}
+      <span
+        aria-hidden="true"
+        className="mt-0.5 shrink-0 text-sm text-neutral-500 transition-colors duration-200 group-hover:text-sky-300"
+      >
+        ↗
+      </span>
     </a>
+  );
+}
+
+function Section({
+  heading,
+  items,
+}: {
+  heading: string;
+  items: LinkItem[];
+}) {
+  return (
+    <section className="mt-12">
+      <h2 className="mb-4 text-[13px] font-medium text-neutral-500">
+        {heading}
+      </h2>
+      <div className="space-y-3">
+        {items.map((item) => (
+          <LinkRow key={item.label + item.description} item={item} />
+        ))}
+      </div>
+    </section>
   );
 }
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-stone-50 text-stone-900">
-      <div className="max-w-sm mx-auto px-5 pt-16 pb-20">
+    <main className="relative min-h-screen overflow-hidden bg-[#060607]">
+      {/* Ambient glow, echoing the portfolio hero */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[420px]"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 100% at 50% 0%, rgba(37, 99, 235, 0.22), transparent 70%)",
+        }}
+      />
 
-        {/* Avatar */}
-        <div className="w-16 h-16 rounded-full bg-amber-100 border border-stone-200 flex items-center justify-center mb-6">
-          <span className="text-2xl leading-none">🌿</span>
-        </div>
+      <div className="relative mx-auto w-full max-w-[440px] px-6 pb-24 pt-20">
+        <header className="text-center">
+          <div className="inline-flex items-center gap-3 rounded-full border border-sky-400/20 bg-sky-500/10 px-4 py-1.5 backdrop-blur-sm text-[13px]">
+            <span className="font-semibold text-white">Kat Ingram</span>
+            <span aria-hidden="true" className="h-3.5 w-px bg-sky-400/30" />
+            <span className="text-sky-300">Greenville, SC</span>
+          </div>
 
-        {/* Identity */}
-        <h1 className="text-3xl font-bold tracking-tight text-stone-900 leading-none">
-          kattyeye
-        </h1>
-        <p className="text-xs font-medium tracking-[0.2em] uppercase text-stone-400 mt-2 mb-3">
-          Dev &middot; Garden &middot; Kitchen
-        </p>
-        <p className="text-sm text-stone-500 leading-relaxed max-w-[260px]">
-          Full-stack dev in Greenville, SC. Building things online and in the backyard.
-        </p>
+          <h1 className="mt-8 text-[38px] font-bold leading-[1.05] tracking-[-0.035em] text-white">
+            Everything I&rsquo;m building, in one place.
+          </h1>
 
-        {/* Divider */}
-        <div className="border-t border-stone-200 my-8" />
-
-        {/* Section label */}
-        <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-stone-400 mb-3">
-          Things I Build
-        </p>
-
-        {/* Projects */}
-        <div className="space-y-2.5">
-          {projects.map((item) => (
-            <LinkCard key={item.label} item={item} />
-          ))}
-        </div>
-
-        {/* Section label */}
-        <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-stone-400 mt-9 mb-3">
-          Elsewhere
-        </p>
-
-        {/* Social links */}
-        <div className="space-y-2.5">
-          {socials.map((item) => (
-            <LinkCard key={item.label} item={item} />
-          ))}
-        </div>
-
-        {/* Section label */}
-        <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-stone-400 mt-9 mb-3">
-          Honest Picks
-        </p>
-
-        {/* Affiliate links */}
-        <div className="space-y-2.5">
-          {picks.map((item) => (
-            <LinkCard key={item.label} item={item} />
-          ))}
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-stone-200 mt-12 pt-6 text-center space-y-1">
-          <p className="text-[10px] font-medium tracking-[0.15em] uppercase text-stone-300">
-            Greenville, SC &middot; 2026
+          <p className="mx-auto mt-5 max-w-[340px] text-[15px] leading-relaxed text-neutral-400">
+            Full-stack developer working on procurement software, AI voice
+            agents, and travel tools — plus a garden that keeps me honest.
           </p>
-          <p className="text-[10px] text-stone-300 leading-relaxed">
-            Affiliate links marked #ad — I only share what I actually use.
-          </p>
-        </div>
+        </header>
 
+        <Section heading="Work" items={work} />
+        <Section heading="Elsewhere" items={elsewhere} />
+        {/* <Section heading="Honest picks" items={picks} /> */}
+
+        <footer className="mt-16 border-t border-white/[0.07] pt-6 text-center">
+          <p className="text-[12px] text-neutral-500">
+            Greenville, SC · {new Date().getFullYear()}
+          </p>
+          {/* <p className="mx-auto mt-2 max-w-[320px] text-[12px] leading-relaxed text-neutral-500">
+            Links marked #ad are affiliate links. I only share what I actually
+            use.
+          </p> */}
+        </footer>
       </div>
     </main>
   );
