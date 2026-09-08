@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "kattyeye | links",
-  description: "Kat's links — dev tools, garden picks, kitchen gear & more",
+  description:
+    "Kat's links — SmartPO, Hey Poppi, Irie, plus garden and kitchen picks",
 };
 
 interface LinkItem {
@@ -13,6 +14,30 @@ interface LinkItem {
   affiliate?: boolean;
   emoji: string;
 }
+
+const projects: LinkItem[] = [
+  {
+    emoji: "▤",
+    label: "SmartPO",
+    description: "Procurement for healthcare supply teams",
+    href: "https://smartpo.com",
+    tag: "smartpo.com",
+  },
+  {
+    emoji: "◐",
+    label: "Hey Poppi",
+    description: "AI voice agents that answer the phone",
+    href: "https://heypoppi.ai",
+    tag: "heypoppi.ai",
+  },
+  {
+    emoji: "◇",
+    label: "Irie",
+    description: "Plan a trip in minutes, not tabs",
+    href: "https://irietravel.app",
+    tag: "irietravel.app",
+  },
+];
 
 const socials: LinkItem[] = [
   {
@@ -113,6 +138,23 @@ export default function Home() {
 
         {/* Divider */}
         <div className="border-t border-stone-200 my-8" />
+
+        {/* Section label */}
+        <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-stone-400 mb-3">
+          Things I Build
+        </p>
+
+        {/* Projects */}
+        <div className="space-y-2.5">
+          {projects.map((item) => (
+            <LinkCard key={item.label} item={item} />
+          ))}
+        </div>
+
+        {/* Section label */}
+        <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-stone-400 mt-9 mb-3">
+          Elsewhere
+        </p>
 
         {/* Social links */}
         <div className="space-y-2.5">
